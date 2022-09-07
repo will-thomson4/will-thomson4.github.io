@@ -58,7 +58,7 @@
 <p>However, a major limitation of using neural radiance fields is the long training times, taking about 24 hours to train, even when using specialised GPU clusters</p>
 
 <h1 id="method">Method</h1>
-<p style="text-align: center;">Pipeline</p>
+<p style="text-align: center;">Processing Pipeline</p>
 
 <p>We develop a data capture pipeline from the iPad, and feed this data into NeuS. This requires capturing the images, sampling them and preprocessing them to extract masks and camera poses</p>
 
@@ -86,13 +86,14 @@
         margin-right: auto; display: block; width: 65%;" /></p>
 </div>
 
-<p style="text-align: center;">A comparison of our method with the original NeRF implementation. For a fair comparison, images of both methods were produced with the same number of network forward passes per ray, 64 for the Radiometer, 32 for the rest. TermiNeRF 32 achieved the average \(7.32 \times\) speed-up in comparison with the original NeRF 64+128, whereas NeRF 8+16 renders the images \(7.99\times\) faster.</p>
+<p style="text-align: center;">Above is shown a comparison between using Colmap structure from motion to build up geometry, and using our NeuS method, for the same data. Whilst neither produce particularly high quality geometry, it is clear that the NeuS pipeline produces better results for data captured in this environment.</p>
 
 <h2 id="rendering">Novel View Synthesis</h2>
 
 <p style="text-align: center;"><img src="/assets/images/main.gif" alt="nvs gif" style="margin-left: auto;
     margin-right: auto; display: block; width: 35%;" /></p>
 
+<p style="text-align: center;">The above GIF shows an interpolation between two input images. As shown, our pipeline is highly accurate for novel view synthesis and colour estimation.</p>
 
 
 <h1 id="conclusion">Conclusion</h1>
