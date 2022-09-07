@@ -35,66 +35,47 @@
       <h1 class="project-name">Facial Capture on Mobile Devices Using Volumetric Neural Rendering</h1>
       <h2 class="project-tagline">William Thomson</h2>
       
-        <a href="https://arxiv.org/abs/2111.03643" class="btn" target="_blank"> Paper </a>
-      
-        <a href="https://drive.google.com/drive/folders/10GFeB_vPKDcTaHBbdt6hEvATu4IlNl2m?usp=sharing" class="btn" target="_blank"> Datasets </a>
-      
-      
+        <a href="https://arxiv.org/abs/2111.03643" class="btn" target="_blank"> Report </a>  
     </header>
 
     <main id="content" class="main-content" role="main">
       <h1 id="abstract">Abstract</h1>
-<p><em>State of the art capture for facial rendering typically involves large, expensive appa- ratus and a highly controlled capture environment, making it inaccessible to many. However, the growth of the 3D visualisation market means that the demand has never been higher for producing photo-realistic avatars. Therefore, this study aims to experiment with using mobile devices to capture facial geometry in less controlled environments with more accessible equipment. To achieve this, this study makes use of NeuS, a study on neural surface rendering, based on the highly popular neural radiance fields (NeRF) work. Our study finds that many challenges still exist for these ’in the wild’ capture pipelines, particularly lighting, which is still very influ- ential on successful surface construction. However, this study demonstrates that results achieved through our NeuS pipeline, in these environments, produce signifi- cantly better surface meshes than those produced by existing structure from motion approaches with the same inputs. Additionally, through leveraging depth sensing hardware on mobile devices, we are able to reduce training times of NeuS by up to 4 hours, opening the door to exciting further research that can be done with depth data in this pipeline..</em></p>
+<p><em>State of the art capture for facial rendering typically involves large, expensive apparatus and a highly controlled capture environment, making it inaccessible to many. However, the growth of the 3D visualisation market means that the demand has never been higher for producing photo-realistic avatars. Therefore, this study aims to experiment with using mobile devices to capture facial geometry in less controlled environments with more accessible equipment. To achieve this, this study makes use of NeuS, a study on neural surface rendering, based on the highly popular neural radiance fields (NeRF) work. Our study finds that many challenges still exist for these ’in the wild’ capture pipelines, particularly lighting, which is still very influential on successful surface construction. However, this study demonstrates that results achieved through our NeuS pipeline, in these environments, produce significantly better surface meshes than those produced by existing structure from motion approaches with the same inputs. Additionally, through leveraging depth sensing hardware on mobile devices, we are able to reduce training times of NeuS by up to 4 hours, opening the door to exciting further research that can be done with depth data in this pipeline.</em></p>
 
 <h1 id="background">Background</h1>
 
-<p>While NeRF captures scenes at very high quality, a major limitation is that it takes a long time to train the model and render images. This is because the neural network representing the volume has to be queried along all the viewing rays. For an image of width \(w\), and height \(h\), and \(n\) depth samples, the rendering requires \(\Theta(nhw)\) network forward passes. With NeRF, it can take up to 30 seconds to render a \(800 \times 800\) image on a high-end GPU.</p>
-
+<p>State of the art facial capture requires large and expensive equipment, with the leading approach being the Lightstage, first presented by Debevec et al in 2000. However, over the last 20 years computer graphics researchers have attempted to reduce the size of this equipment and experiment with less controlled capture environments. The 2022-launched, deep-tech, startup Lumirithmic from Imperial College London researchers, attempts to minimise this setup to fit on a single desk. This report attempts to take this further and explores the results that can be achieved using a single iPad.</p>
 <p style="text-align: center;"><img src="/assets/images/termination.png" alt="termination img" style="margin-left: auto;
   margin-right: auto; display: block; width: 65%;" /></p>
-<p>Of the many points sampled along each viewing ray, only a very small fraction contribute to the final color of the pixel. Our approach, called TermiNeRF, efficiently predicts the most important samples, speeding up the rendering \(\sim 14\) times.</p>
+
+<p>Whilst the majority of the methods used in industry use photometric stereo methods for extracting facial geometry, this report explore using Neural Radiance Fields. The landmark paper in this field was Mildenhall et al's 2020 paper NeRF (Neural Radiance Fields), which trains a neural network to optimise a volumetric scene function, to predict colour and density for points in a volume. A study which builds on NeRF is NeuS (Neural Surface Reconstruction), a paper published by Wang et al in 2021. NeuS works similarly to NeRF, but instead of outputting density, it outputs the SDF for each point, resulting in smoother, more accurate surface reconstructions.</p>
+
+<p>However, a major limitation of using neural radiance fields is the long training times, taking about 24 hours to train, even when using specialised GPU clusters</p>
 
 <h1 id="method">Method</h1>
+<p style="text-align: center;">Pipeline</p>
 
-<p>We propose a more efficient way to render (and train) a neural field model. Our approach works by jointly training a <em>sampling network</em> along with a <em>color network</em>, with the collective name <em>TermiNeRF</em>. The sampling network estimates where along the viewing direction the surfaces lie, thereby allowing the color network to be sampled much more efficiently, reducing the rendering time to less than 1s. This approach can be also applied to quickly edit a scene by rapidly learning changes to lighting or materials for a scene.</p>
+<p>We develop a data capture pipeline from the iPad, and feed this data into NeuS. This requires capturing the images, sampling them and preprocessing them to extract masks and camera poses</p>
 
-<p><img src="/assets/images/rendering_pipeline.png" alt="rendering pipeline img" style="margin-left: auto;
+<p><img src="/assets/images/pipeline.png" alt="pipeline img" style="margin-left: auto;
   margin-right: auto; display: block; width: 100%;" /></p>
 
-<p style="text-align: center;">Rendering pipeline overview</p>
+<p>We also attempt to leverage the depth data captured to reduce training times by providing a more refined sampling strategy. This is done by using the depth data to inform our sampling bound, to reduce samples on empty space, thus enabling a reduction in the number of samples, speeding up training times.</p>
 
-<p>To render an image, rays are first discretized into disjunct bins and each ray is then evaluated by the sampling network. The sampling network then determines the weight of each bin - the distribution of ideal sampling locations along the ray. Ray points drawn stochastically according to this distribution are then separately evaluated by the color network. The final color is aggregated via volumetric rendering.</p>
 
 <h1 id="results">Results</h1>
 <h2 id="rendering">Rendering</h2>
 
-<video muted="" autoplay="" loop="" controls="" width="100%">
-    <source src="/assets/videos/video stitch.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-</video>
 <p style="text-align: center;">A comparison of our method with the original NeRF implementation. For a fair comparison, images of both methods were produced with the same number of network forward passes per ray, 64 for the Radiometer, 32 for the rest. TermiNeRF 32 achieved the average \(7.32 \times\) speed-up in comparison with the original NeRF 64+128, whereas NeRF 8+16 renders the images \(7.99\times\) faster.</p>
 
-<h2 id="fine-tuning-and-adaptation-to-a-modified-scene">Fine-tuning and adaptation to a modified scene</h2>
+<h2 id="rendering">Novel View Synthesis</h2>
 
-<p>In this experiment we adapt the network to a modified scene with similar geometry and different colors or lighting conditions. As the geometry stays the same as the original scene, we can reuse the already trained sampling network to guide the training of the color. This prior knowledge of the geometry allows us to speed up the training and adapt the network in a matter of minutes instead of hours.</p>
-
-<video muted="" autoplay="" loop="" controls="">
-    <source src="/assets/videos/lego_fine_tuned.mp4" type="video/mp4" />
-</video>
-<video muted="" autoplay="" loop="" controls="">
-    <source src="/assets/videos/ship_fine_tuned.mp4" type="video/mp4" />
-</video>
-<p style="text-align: center;">Adaptation of the network to a modified scene and the corresponding training time required to adapt on a single Tesla T4 GPU.</p>
-
-<h1 id="video-explanation">Video Explanation</h1>
-
-<iframe width="640" height="360" src="https://www.youtube.com/embed/cyF-sg9v7So" title="Facial Capture on Mobile Devices Using Volumetric Neural Rendering" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
 
 <h1 id="conclusion">Conclusion</h1>
-<p>Neural Radiance Fields produce high-quality renders but are computationally expensive to render. In this paper, we propose a <em>sampling network</em> to focus only on the regions of a ray that yield a color, which effectively allows us to decrease the number of necessary forward passes through the network speeding up the rendering pipeline \(\approx 14 \times\).</p>
 
-<p>The network performs one-shot ray-volume intersection distribution estimations, keeping the pipeline efficient and fast. We use only RGB data to train the model, which makes this method not only versatile, but also more accurate and suitable for translucent surfaces.</p>
+<p>To conclude, this study aimed to experiment with using mobile devices to capture data for facial geometry rendering, primarily utilising the NeuS software for volu- metric neural rendering. Several observations were made through the results of this study. Firstly, it appears that when using NeuS, training with masks has little effect of reconstruction accuracy. In fact, using masks can be harmful if the mask is not properly defined, resulting in the mesh fusing with the background. Instead, we found that a far more important factor was to correctly define the region of inter- est encapsulated by the camera poses. Additionally, as with state of the art recon- struction techniques, lighting conditions are still very influential in successful surface construction. More balanced, ambient, lighting conditions result in better surface re- constructions than lighting conditions that create heavy shadows and highly uneven pixel intensities. Despite these challenges in our pipeline, we still found that sur- face reconstructions achieved through this NeuS pipeline qualitatively outperformed surfaces acquired when using structure from motion with the same data.</p>
 
+<p>Furthermore, one of the advantages offered by mobile devices is the access to depth sensing hardware. These depth cameras were used to inform our neural vol- umetric rendering sampling strategy, resulting in a quicker training time without reducing mesh quality. Although, even with our optimisation, one of the biggest lim- itations of this pipeline remains the long training times, which can range between 14 and 25 hours. However, with an increased availability of depth sensing capabilities on mobile devices, this work could be taken further to incorporate depth more to potentially be used to overcome some of the challenges faced in our pipeline.</p>
 
       <footer class="site-footer">
         
