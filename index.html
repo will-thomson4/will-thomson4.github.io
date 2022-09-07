@@ -45,10 +45,13 @@
 <h1 id="background">Background</h1>
 
 <p>State of the art facial capture requires large and expensive equipment, with the leading approach being the Lightstage, first presented by Debevec et al in 2000. However, over the last 20 years computer graphics researchers have attempted to reduce the size of this equipment and experiment with less controlled capture environments. The 2022-launched, deep-tech, startup Lumirithmic from Imperial College London researchers, attempts to minimise this setup to fit on a single desk. This report attempts to take this further and explores the results that can be achieved using a single iPad.</p>
-<p style="text-align: center;"><img src="/assets/images/lightstage-franco.jpeg" alt="lightstage-franco" style="margin-left: auto;
-  margin-right: auto; display: block; width: 65%;" /></p>
-<p style="text-align: center;"><img src="/assets/images/lightstage-spiderman.jpeg" alt="lightstage-spiderman" style="margin-left: auto;
-    margin-right: auto; display: block; width: 65%;" /></p>
+
+<div style="display: flex">
+    <p style="text-align: center;"><img src="/assets/images/lightstage-franco.jpeg" alt="lightstage-franco" style="margin-left: auto;
+    margin-right: auto; display: block; width: 35%;" /></p>
+    <p style="text-align: center;"><img src="/assets/images/lightstage-spiderman.jpeg" alt="lightstage-spiderman" style="margin-left: auto;
+        margin-right: auto; display: block; width: 35%;" /></p>
+</div>
 
 <p>Whilst the majority of the methods used in industry use photometric stereo methods for extracting facial geometry, this report explore using Neural Radiance Fields. The landmark paper in this field was Mildenhall et al's 2020 paper NeRF (Neural Radiance Fields), which trains a neural network to optimise a volumetric scene function, to predict colour and density for points in a volume. A study which builds on NeRF is NeuS (Neural Surface Reconstruction), a paper published by Wang et al in 2021. NeuS works similarly to NeRF, but instead of outputting density, it outputs the SDF for each point, resulting in smoother, more accurate surface reconstructions.</p>
 
@@ -68,17 +71,19 @@
 <h1 id="results">Results</h1>
 <h2 id="rendering">Rendering</h2>
 
-<p style="text-align: center;"><img src="/assets/images/no-mask-mesh.png" alt="lightstage-franco" style="margin-left: auto;
-    margin-right: auto; display: block; width: 65%;" /></p>
-  <p style="text-align: center;"><img src="/assets/images/colmap-.png" alt="lightstage-spiderman" style="margin-left: auto;
-      margin-right: auto; display: block; width: 65%;" /></p>
+<div style="display: flex">
+    <p style="text-align: center;"><img src="/assets/images/no-mask-mesh.png" alt="lightstage-franco" style="margin-left: auto;
+        margin-right: auto; display: block; width: 35%;" /></p>
+    <p style="text-align: center;"><img src="/assets/images/colmap-.png" alt="lightstage-spiderman" style="margin-left: auto;
+        margin-right: auto; display: block; width: 35%;" /></p>
+</div>
 
 <p style="text-align: center;">A comparison of our method with the original NeRF implementation. For a fair comparison, images of both methods were produced with the same number of network forward passes per ray, 64 for the Radiometer, 32 for the rest. TermiNeRF 32 achieved the average \(7.32 \times\) speed-up in comparison with the original NeRF 64+128, whereas NeRF 8+16 renders the images \(7.99\times\) faster.</p>
 
 <h2 id="rendering">Novel View Synthesis</h2>
 
 <p style="text-align: center;"><img src="/assets/images/main.gif" alt="nvs gif" style="margin-left: auto;
-    margin-right: auto; display: block; width: 65%;" /></p>
+    margin-right: auto; display: block; width: 35%;" /></p>
 
 
 
