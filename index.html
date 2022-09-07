@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Facial Capture on Mobile Devices Using Volumetric Neural Rendering</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Facial Capture on Mobile Devices Using Volumetric Neural Rendering" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Martin Piala Ronald Clark Accepted at 3DV 2021" />
+<meta property="og:description" content="Martin Piala Ronald Clark Accepted at 3DV 2021" />
+<link rel="canonical" href="https://projects.mackopes.com/terminerf/" />
+<meta property="og:url" content="https://projects.mackopes.com/terminerf/" />
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Facial Capture on Mobile Devices Using Volumetric Neural Rendering</h1>
+      <h2 class="project-tagline">William Thomson</h2>
+      
+        <a href="https://arxiv.org/abs/2111.03643" class="btn" target="_blank"> Paper </a>
+      
+        <a href="https://drive.google.com/drive/folders/10GFeB_vPKDcTaHBbdt6hEvATu4IlNl2m?usp=sharing" class="btn" target="_blank"> Datasets </a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <h1 id="abstract">Abstract</h1>
+<p><em>State of the art capture for facial rendering typically involves large, expensive appa- ratus and a highly controlled capture environment, making it inaccessible to many. However, the growth of the 3D visualisation market means that the demand has never been higher for producing photo-realistic avatars. Therefore, this study aims to experiment with using mobile devices to capture facial geometry in less controlled environments with more accessible equipment. To achieve this, this study makes use of NeuS, a study on neural surface rendering, based on the highly popular neural radiance fields (NeRF) work. Our study finds that many challenges still exist for these ’in the wild’ capture pipelines, particularly lighting, which is still very influ- ential on successful surface construction. However, this study demonstrates that results achieved through our NeuS pipeline, in these environments, produce signifi- cantly better surface meshes than those produced by existing structure from motion approaches with the same inputs. Additionally, through leveraging depth sensing hardware on mobile devices, we are able to reduce training times of NeuS by up to 4 hours, opening the door to exciting further research that can be done with depth data in this pipeline..</em></p>
+
+<h1 id="background">Background</h1>
+
+<p>While NeRF captures scenes at very high quality, a major limitation is that it takes a long time to train the model and render images. This is because the neural network representing the volume has to be queried along all the viewing rays. For an image of width \(w\), and height \(h\), and \(n\) depth samples, the rendering requires \(\Theta(nhw)\) network forward passes. With NeRF, it can take up to 30 seconds to render a \(800 \times 800\) image on a high-end GPU.</p>
+
+<p style="text-align: center;"><img src="/assets/images/termination.png" alt="termination img" style="margin-left: auto;
+  margin-right: auto; display: block; width: 65%;" /></p>
+<p>Of the many points sampled along each viewing ray, only a very small fraction contribute to the final color of the pixel. Our approach, called TermiNeRF, efficiently predicts the most important samples, speeding up the rendering \(\sim 14\) times.</p>
+
+<h1 id="method">Method</h1>
+
+<p>We propose a more efficient way to render (and train) a neural field model. Our approach works by jointly training a <em>sampling network</em> along with a <em>color network</em>, with the collective name <em>TermiNeRF</em>. The sampling network estimates where along the viewing direction the surfaces lie, thereby allowing the color network to be sampled much more efficiently, reducing the rendering time to less than 1s. This approach can be also applied to quickly edit a scene by rapidly learning changes to lighting or materials for a scene.</p>
+
+<p><img src="/assets/images/rendering_pipeline.png" alt="rendering pipeline img" style="margin-left: auto;
+  margin-right: auto; display: block; width: 100%;" /></p>
+
+<p style="text-align: center;">Rendering pipeline overview</p>
+
+<p>To render an image, rays are first discretized into disjunct bins and each ray is then evaluated by the sampling network. The sampling network then determines the weight of each bin - the distribution of ideal sampling locations along the ray. Ray points drawn stochastically according to this distribution are then separately evaluated by the color network. The final color is aggregated via volumetric rendering.</p>
+
+<h1 id="results">Results</h1>
+<h2 id="rendering">Rendering</h2>
+
+<video muted="" autoplay="" loop="" controls="" width="100%">
+    <source src="/assets/videos/video stitch.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+</video>
+<p style="text-align: center;">A comparison of our method with the original NeRF implementation. For a fair comparison, images of both methods were produced with the same number of network forward passes per ray, 64 for the Radiometer, 32 for the rest. TermiNeRF 32 achieved the average \(7.32 \times\) speed-up in comparison with the original NeRF 64+128, whereas NeRF 8+16 renders the images \(7.99\times\) faster.</p>
+
+<h2 id="fine-tuning-and-adaptation-to-a-modified-scene">Fine-tuning and adaptation to a modified scene</h2>
+
+<p>In this experiment we adapt the network to a modified scene with similar geometry and different colors or lighting conditions. As the geometry stays the same as the original scene, we can reuse the already trained sampling network to guide the training of the color. This prior knowledge of the geometry allows us to speed up the training and adapt the network in a matter of minutes instead of hours.</p>
+
+<video muted="" autoplay="" loop="" controls="">
+    <source src="/assets/videos/lego_fine_tuned.mp4" type="video/mp4" />
+</video>
+<video muted="" autoplay="" loop="" controls="">
+    <source src="/assets/videos/ship_fine_tuned.mp4" type="video/mp4" />
+</video>
+<p style="text-align: center;">Adaptation of the network to a modified scene and the corresponding training time required to adapt on a single Tesla T4 GPU.</p>
+
+<h1 id="video-explanation">Video Explanation</h1>
+
+<iframe width="640" height="360" src="https://www.youtube.com/embed/cyF-sg9v7So" title="Facial Capture on Mobile Devices Using Volumetric Neural Rendering" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<h1 id="conclusion">Conclusion</h1>
+<p>Neural Radiance Fields produce high-quality renders but are computationally expensive to render. In this paper, we propose a <em>sampling network</em> to focus only on the regions of a ray that yield a color, which effectively allows us to decrease the number of necessary forward passes through the network speeding up the rendering pipeline \(\approx 14 \times\).</p>
+
+<p>The network performs one-shot ray-volume intersection distribution estimations, keeping the pipeline efficient and fast. We use only RGB data to train the model, which makes this method not only versatile, but also more accurate and suitable for translucent surfaces.</p>
+
+
+      <footer class="site-footer">
+        
+        <!-- <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span> -->
+      </footer>
+    </main>
+  </body>
+</html>
