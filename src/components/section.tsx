@@ -1,7 +1,6 @@
 import { Download, Upload } from '@wt-4/react-stateful-animations';
 import Card from './card';
 import Lottie from '@lottielab/lottie-player/react';
-import Image from 'astro/components/Image.astro';
 
 const animations = [
   {
@@ -38,15 +37,24 @@ const Section = () => {
             duration, these icons transition between states and maintain their
             states indefinitely.
           </p>
-          <p className="text-gray-700 leading-relaxed mt-4 text-sm">
+          <p className="text-gray-600 leading-relaxed mt-4 text-sm">
             All animations built in{' '}
             <a className="text-blue-500" href="https://lottielab.com">
               LottieLab
             </a>
           </p>
+
+          <div className="flex items-center gap-4 mt-4">
+            <a href="https://www.npmjs.com/package/@wt-4/react-stateful-animations">
+              <img src="/npm.svg" alt="NPM Logo" className="w-12 h-12" />
+            </a>
+            <a href="https://github.com/will-thomson4/react-stateful-animations">
+              <img src="/github.svg" alt="Github Logo" className="w-8 h-8" />
+            </a>
+          </div>
         </div>
 
-        <div className="my-8">
+        <div className="my-4">
           <h2 className="text-2xl font-semibold mb-4">Quick Start</h2>
           <div className="bg-gray-50 border rounded-lg p-6 mb-2">
             <img src="/snippet.svg" alt="Code example" className="w-full" />
