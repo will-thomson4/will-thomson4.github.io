@@ -38,6 +38,12 @@ const Section = () => {
             duration, these icons transition between states and maintain their
             states indefinitely.
           </p>
+          <p className="text-gray-700 leading-relaxed mt-4 text-sm">
+            All animations built in{' '}
+            <a className="text-blue-500" href="https://lottielab.com">
+              LottieLab
+            </a>
+          </p>
         </div>
 
         <div className="my-8">
