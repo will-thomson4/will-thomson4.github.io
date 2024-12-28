@@ -45,7 +45,7 @@ const Section = () => {
           </p>
 
           <div className="flex items-center gap-4 mt-4">
-            <a href="https://www.npmjs.com/package/@wt-4/react-stateful-animations">
+            <a href="https://www.npmjs.com/package/react-stateful-animations">
               <img src="/npm.svg" alt="NPM Logo" className="w-12 h-12" />
             </a>
             <a href="https://github.com/will-thomson4/react-stateful-animations">
