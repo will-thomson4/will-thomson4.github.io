@@ -1,4 +1,4 @@
-import { Download, Upload } from '@wt-4/react-stateful-animations';
+import { Download, Upload, Send } from 'react-stateful-animations';
 import Card from './card';
 import Lottie from '@lottielab/lottie-player/react';
 
@@ -10,6 +10,10 @@ const animations = [
   {
     title: 'Upload',
     animation: <Upload id="Upload" className="w-16 h-16" />,
+  },
+  {
+    title: 'Send',
+    animation: <Send id="Send" className="w-16 h-16" />,
   },
 ];
 
@@ -81,7 +85,7 @@ const Section = () => {
           <p className="text-gray-700 mb-6">
             The following components are available in the{' '}
             <code className="bg-gray-100 px-2 py-1 rounded">
-              @wt-4/react-stateful-animations
+              react-stateful-animations
             </code>{' '}
             package:
           </p>

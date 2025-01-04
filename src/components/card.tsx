@@ -1,4 +1,4 @@
-import { animationEnd, animationStart } from '@wt-4/react-stateful-animations';
+import { animationEnd, animationStart } from 'react-stateful-animations';
 
 const Card = ({
   title,
